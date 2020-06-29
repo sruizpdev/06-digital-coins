@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import useCoin from '../hooks/useCoin';
 import useCryptoCoin from '../hooks/useCryptoCoin';
 import Axios from 'axios';
+import Error from './Error';
 
 const Button = styled.input`
   margin-top: 20px;
@@ -21,7 +22,10 @@ const Button = styled.input`
   }
 `;
 
-const Form = () => {
+const Form = ({ saveCoin, saveCryptoCoin }) => {
+  const [listCrypto, saveCrypto] = useState([]);
+
+  const [error, saveError] = useState(false);
   const COINS = [
     { code: 'USD', name: 'Dolar USA' },
     { code: 'EUR', name: 'Euro' },
@@ -29,19 +33,36 @@ const Form = () => {
   ];
   const [coin, SelectCoin] = useCoin('Choose your coin', '', COINS);
 
-  const [crytoCoin, SelectCrytoCoin] = useCryptoCoin('Select Crypto Coin', '');
+  const [cryptoCoin, SelectCrytoCoin] = useCryptoCoin(
+    'Select Crypto Coin',
+    '',
+    listCrypto
+  );
 
   useEffect(() => {
     const getApiData = async () => {
       const url =
         'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD';
       const result = await Axios.get(url);
-      console.log(result.data.Data);
+      saveCrypto(result.data.Data);
     };
     getApiData();
   }, []);
+
+  const calcCoin = (e) => {
+    e.preventDefault();
+    if (coin === '' || cryptoCoin === '') {
+      saveError(true);
+      return;
+    }
+    saveError(false);
+    saveCoin(coin);
+    saveCryptoCoin(cryptoCoin);
+  };
+
   return (
-    <form>
+    <form onSubmit={calcCoin}>
+      {error ? <Error message="All fields are required" /> : null}
       <SelectCoin />
       <SelectCrytoCoin />
       <Button type="submit" value="Calc" />
