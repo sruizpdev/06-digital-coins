@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import useCoin from '../hooks/useCoin';
 
 const Button = styled.input`
   margin-top: 20px;
@@ -18,12 +19,19 @@ const Button = styled.input`
   }
 `;
 
-const From = () => {
+const Form = () => {
+  const COINS = [
+    { code: 'USD', name: 'Dolar USA' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'PLN', name: 'Zloty' },
+  ];
+  const [coin, SelectCoin] = useCoin('Choose your coin', '', COINS);
   return (
     <form>
+      <SelectCoin />
       <Button type="submit" value="Calc" />
     </form>
   );
 };
 
-export default From;
+export default Form;
