@@ -21,22 +21,22 @@ const Select = styled.select`
   font-size: 1.2rem;
 `;
 
-const useCoin = (label, initialState, options) => {
+const useCryptoCoin = (label, initialState, options) => {
   const [state, updateState] = useState(initialState);
-  const SelectCoin = () => (
+  const SelectCryptoCoin = () => (
     <Fragment>
       <Label>{label}</Label>
       <Select onChange={(e) => updateState(e.target.value)} value={state}>
         <option value="">--Select coin--</option>
-        {options.map((opt) => (
+        {/* {options.map((opt) => (
           <option key={opt.code} value={opt.code}>
             {opt.name}
           </option>
-        ))}
+        ))} */}
       </Select>
     </Fragment>
   );
-  return [state, SelectCoin, updateState];
+  return [state, SelectCryptoCoin, updateState];
 };
 
-export default useCoin;
+export default useCryptoCoin;
